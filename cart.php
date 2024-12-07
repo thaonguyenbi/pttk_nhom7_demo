@@ -1,3 +1,10 @@
+<?php
+include 'database/conn.php';
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,65 +99,6 @@
     </div>
   </div>
 
-  <!-- <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart" aria-labelledby="My Cart">
-      <div class="offcanvas-header justify-content-center">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your cart</span>
-            <span class="badge bg-primary rounded-pill">3</span>
-          </h4>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Growers cider</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$12</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Fresh grapes</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Heinz tomato ketchup</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$5</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>$20</strong>
-            </li>
-          </ul>
-  
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </div>
-      </div>
-    </div>
-    
-    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch" aria-labelledby="Search">
-      <div class="offcanvas-header justify-content-center">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Search</span>
-          </h4>
-          <form role="search" action="index.html" method="get" class="d-flex mt-3 gap-0">
-            <input class="form-control rounded-start rounded-0 bg-light" type="email" placeholder="What are you looking for?" aria-label="What are you looking for?">
-            <button class="btn btn-dark rounded-end rounded-0" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </div> -->
 
   <header>
     <div class="container-fluid">
@@ -310,6 +258,14 @@
 
 
     <!-- Cart Start -->
+    <?php
+    // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+    $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
+                                                FROM chitietgiohang
+                                                JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+                                               
+                                                ORDER BY chitietgiohang.MaCTGH ASC");
+    ?>
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
             <div class="col-lg-12 table-responsive mb-5">
@@ -324,63 +280,47 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <tr>
-                            <td class="align-middle">
-                                <div style="display: flex; align-items: center;">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3427/3427028.png" alt="" style="width: 100px; margin-right: 10px;">
-                                    <span>Trà sữa truyền thống</span>
-                                </div>
-                            </td>
-                            <td class="align-middle">30000đ</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
+                        <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                            <tr>
+                                <td class="align-middle">
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
+                                        <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?></span>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                                </td>
+                                <td class="align-middle">
+                                    <!-- Hiển thị chỉ giá sản phẩm -->
+                                    <?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ
+                                </td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm bg-secondary text-center" value="<?= $cartDetailsRow['SoLuong'] ?>">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-primary btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">30000đ</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">
-                                <div style="display: flex; align-items: center;">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3427/3427028.png" alt="" style="width: 100px; margin-right: 10px;">
-                                    <span>Trà sữa truyền thống</span>
-                                </div>
-                            </td>
-                            <td class="align-middle">30000đ</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-minus">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-primary btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">30000đ</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                                </td>
+                                <td class="align-middle">
+                                    code
+                                </td>
+                                <td class="align-middle">
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
-    
-                <!-- Section for Total and Button -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                  <!-- Section for Total and Button -->
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
                     <!-- Left Side: "Chọn tất cả" -->
                     <div style="font-size: 20px">
                         <input type="checkbox" style="width: 15px; height: 15px; margin-right: 10px;">
@@ -396,82 +336,95 @@
                             Mua <span>(1)</span>
                         </button>
                     </div>
-                </div>
             </div>
         </div>
     </div>
-    
     <!-- Cart End -->
 
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <a href="" class="text-decoration-none">
-                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">E</span>Shopper</h1>
-                </a>
-                <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
+    <footer class="py-5" style="background-color: #580323;">
+        <div class="container-fluid">
+          <div class="row">
+    
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="footer-menu">
+                <img src="images/logo-footer.png" alt="logo" width="70%">
+    
+              </div>
             </div>
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">LIÊN KẾT NHANH</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-dark mb-2" style="font-style: italic;" href="index.html"><i class="fa fa-angle-right mr-2"></i>Trang chủ</a>
-                            <a class="text-dark mb-2" style="font-style: italic;" href="index.html"><i class="fa fa-angle-right mr-2"></i>Giới thiệu</a>
-                            <a class="text-dark mb-2" style="font-style: italic;" href="index.html"><i class="fa fa-angle-right mr-2"></i>Sản phẩm</a>
-                            <a class="text-dark mb-2" style="font-style: italic;" href="index.html"><i class="fa fa-angle-right mr-2"></i>Liên hệ</a>       
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Quick Links</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-dark mb-2" href="index.html"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-dark mb-2" href="shop.html"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-dark mb-2" href="detail.html"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-                            <a class="text-dark mb-2" href="cart.html"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                            <a class="text-dark mb-2" href="checkout.html"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="font-weight-bold text-dark mb-4">Newsletter</h5>
-                        <form action="">
-                            <div class="form-group">
-                                <input type="text" class="form-control border-0 py-4" placeholder="Your Name" required="required" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control border-0 py-4" placeholder="Your Email"
-                                    required="required" />
-                            </div>
-                            <div>
-                                <button class="btn btn-primary btn-block border-0 py-3" type="submit">Subscribe Now</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    
+            <div class="col-md-2 col-sm-6 text-light">
+              <div class="footer-menu ">
+                <h5 class="text-uppercase" style="color:white">Liên kết nhanh</h5>
+                <ul class="menu-list list-unstyled">
+                  <li class="menu-item">
+                    <a href="#" class="nav-link">Trang chủ</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="nav-link">Giới thiệu</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="nav-link">Sản phẩm</a>
+                  </li>
+                  <li class="menu-item">
+                    <a href="#" class="nav-link">Liên hệ</a>
+                  </li>
+                </ul>
+              </div>
             </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="footer-menu">
+                <h5 class="text-uppercase" style="color:white">Thông tin liên hệ</h5>
+                <ul class="menu-list list-unstyled">
+                  <li class="menu-item">
+                    Địa chỉ: 21 Rạch Bùng Binh, Phường 10, Quận 3, TP. Hồ Chí Minh
+                  </li>
+                  <li class="menu-item">
+                    Hotline: 0878 808 808
+                  </li>
+                  <li class="menu-item">
+                    Email: maychaxinchao@maycha.com.vn
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <div class="footer-menu">
+                <h5 class="text-uppercase" style="color:white">Địa chỉ công ty</h5>
+                <ul class="menu-list list-unstyled">
+                  <li class="menu-item">
+                    CÔNG TY CỔ PHẦN MAYCHA
+                  </li>
+                  <li class="menu-item">
+                    38 Trịnh Đình Trọng, Phường Phú Trung, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam
+                  </li>
+                  <li class="menu-item">
+                    MST: 0317701572
+                  </li>
+                  <li class="menu-item">
+                    Hotline: 0878 808 808
+                  </li>
+                  <li class="menu-item">
+                    Email: maychaxinchao@maycha.com.vn
+                  </li>
+    
+                </ul>
+              </div>
+            </div>
+    
+          </div>
         </div>
-        <div class="row border-top border-light mx-xl-5 py-4">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-dark">
-                    &copy; <a class="text-dark font-weight-semi-bold" href="#">Your Site Name</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-dark font-weight-semi-bold" href="https://htmlcodex.com">HTML Codex</a><br>
-                    Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
-            </div>
-        </div>
-    </div>
+      </footer>
     <!-- Footer End -->
-
+    <div id="footer-bottom" style="background-color: #B11F4E;">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 copyright">
+              <p class="text-light">MAYCHA © 2024. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
