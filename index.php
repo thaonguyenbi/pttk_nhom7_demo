@@ -157,7 +157,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
 
         <div class="col-sm-4 col-lg-3 text-center text-sm-start">
           <div class="main-logo">
-            <a href="index.html">
+            <a href="index.php">
               <img src="images/logo.png" alt="logo" class="img-fluid" width="20%">
             </a>
           </div>
@@ -171,7 +171,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
               </svg>
             </div>
             <div class="col-11 col-md-7">
-              <form id="search-form" class="text-center" action="index.html" method="post">
+              <form id="search-form" class="text-center" action="index.php" method="post">
                 <input type="text" class="form-control border-0 bg-transparent" placeholder="Tìm kiếm" />
               </form>
             </div>
@@ -256,32 +256,6 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
                   <li class="nav-item">
                     <a href="#dangnhap" class="nav-link text-light">Đăng nhập</a>
                   </li>
-                  <!-- <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-                      <ul class="dropdown-menu" aria-labelledby="pages">
-                        <li><a href="index.html" class="dropdown-item">About Us </a></li>
-                        <li><a href="index.html" class="dropdown-item">Shop </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Product </a></li>
-                        <li><a href="index.html" class="dropdown-item">Cart </a></li>
-                        <li><a href="index.html" class="dropdown-item">Checkout </a></li>
-                        <li><a href="index.html" class="dropdown-item">Blog </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Post </a></li>
-                        <li><a href="index.html" class="dropdown-item">Styles </a></li>
-                        <li><a href="index.html" class="dropdown-item">Contact </a></li>
-                        <li><a href="index.html" class="dropdown-item">Thank You </a></li>
-                        <li><a href="index.html" class="dropdown-item">My Account </a></li>
-                        <li><a href="index.html" class="dropdown-item">404 Error </a></li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#brand" class="nav-link">Brand</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#sale" class="nav-link">Sale</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#blog" class="nav-link">Blog</a>
-                    </li> -->
                 </ul>
 
               </div>
@@ -319,7 +293,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
     </div>
   </section>
 
-  <!-- product list -->
+  <!-- product -->
   <section class="py-5">
     <div class="container-fluid">
 
@@ -342,7 +316,6 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
                   while ($productRow = mysqli_fetch_array($productsResult)) {
                     $productID = $productRow['MaSP'];
                   ?>
-
                     <div class="col">
                       <div class="product-item">
                         <!-- <span class="badge bg-success position-absolute m-3">-30%</span> -->
@@ -351,7 +324,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
                           </svg></a>
                         <!-- product img -->
                         <figure>
-                          <a href="index.html" title="Product Title">
+                          <a href="index.php" title="Product Title">
                             <img src="images/thumb-product.png" class="tab-image">
                           </a>
                         </figure>
@@ -361,11 +334,17 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
                         <!-- price -->
                         <span class="price"><?= number_format($productRow['DonGia'], 0, ',', '.') ?>đ</span>
                         <div class="d-flex align-items-center justify-content-between">
-                          <a href="#cart.php" class="nav-link btn-cart">
-                            <svg width="24" height="24">
-                              <use xlink:href="#cart"></use>
-                            </svg>
-                          </a>
+                          <form action="cart.php" method="post">
+                            <button type="submit" name="addtocartbtn" value="1" class="btn-cart">
+                              <svg width="24" height="24">
+                                <use xlink:href="#cart"></use>
+                              </svg>
+                            </button>
+                            <input type="hidden" name="tensp" value="<?= $productRow['TenSanPham'] ?>">
+                            <input type="hidden" name="dongia" value="<?= $productRow['DonGia'] ?>">
+                            <input type="hidden" name="soluong" value="1">
+                          </form>
+
                         </div>
                       </div>
                     </div>
