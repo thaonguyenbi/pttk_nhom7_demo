@@ -219,7 +219,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
     </div>
     <div class="container-fluid">
       <div class="row py-3">
-        <div class="d-flex justify-content-center justify-content-sm-between align-items-center" style="background-color: #580323;">
+        <div class="d-flex justify-content-center align-items-center" style="background-color: #580323;">
           <nav class="main-menu d-flex navbar navbar-expand-lg align-content-center">
 
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
