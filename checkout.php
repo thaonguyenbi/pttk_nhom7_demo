@@ -282,12 +282,13 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
               <div class="">
                 <div class="custom-control custom-radio">
                   <input type="radio" class="custom-control-input" name="payment" id="cash">
-                  <label class="custom-control-label" for="banktransfer">Tiền mặt</label>
+                  <label class="custom-control-label" for="cash">Tiền mặt</label>
                 </div>
                 <div class="custom-control custom-radio">
                   <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
                   <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
                 </div>
+
               </div>
             </div>
             <div class="col-md-6 form-group">
