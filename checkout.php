@@ -15,11 +15,15 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
 <html lang="en">
 
 <head>
+  <title>Maycha</title>
   <meta charset="utf-8">
-  <title>EShopper - Bootstrap Shop Template</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="Free HTML Templates" name="keywords">
-  <meta content="Free HTML Templates" name="description">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
 
   <!-- Favicon -->
   <link href="img/favicon.ico" rel="icon">
@@ -105,8 +109,6 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
       </symbol>
     </defs>
   </svg>
-
-
 
   <header>
     <div class="container-fluid">
@@ -256,7 +258,7 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
     <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
       <h1 class="font-weight-semi-bold text-uppercase mb-3">THANH TOÁN</h1>
       <div class="d-inline-flex">
-        <p class="m-0"><a href=""><i class="fa fa-home"></i></a></p>
+        <p class="m-0"><a href="index.php"><i class="fa fa-home"></i></a></p>
         <p class="m-0 px-2">></p>
         <p class="m-0">Giỏ hàng</p>
         <p class="m-0 px-2">></p>
@@ -279,7 +281,7 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
             <div class="col-md-6 form-group">
               <div class="">
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                  <input type="radio" class="custom-control-input" name="payment" id="cash">
                   <label class="custom-control-label" for="banktransfer">Tiền mặt</label>
                 </div>
                 <div class="custom-control custom-radio">
@@ -404,31 +406,31 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
                 <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
               </div>
             <?php } ?> <!-- Đóng vòng lặp while -->
-          
-          <hr class="mt-0">
-          <div class="d-flex justify-content-between mb-3 pt-1">
-            <h6 class="font-weight-medium">Tạm tính:</h6>
-            <h6 class="font-weight-medium">CODE</h6>
+
+            <hr class="mt-0">
+            <div class="d-flex justify-content-between mb-3 pt-1">
+              <h6 class="font-weight-medium">Tạm tính:</h6>
+              <h6 class="font-weight-medium">CODE</h6>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h6 class="font-weight-medium">Phí vận chuyển</h6>
+              <h6 class="font-weight-medium">15000đ</h6>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <h6 class="font-weight-medium">Phí vận chuyển</h6>
-            <h6 class="font-weight-medium">15000đ</h6>
+          <div class="card-footer border-secondary bg-transparent">
+            <div class="d-flex justify-content-between mt-2">
+              <h5 class="font-weight-bold">Tổng:</h5>
+              <h5 class="font-weight-bold">CODE</h5>
+            </div>
           </div>
         </div>
-        <div class="card-footer border-secondary bg-transparent">
-          <div class="d-flex justify-content-between mt-2">
-            <h5 class="font-weight-bold">Tổng:</h5>
-            <h5 class="font-weight-bold">CODE</h5>
+        <div class="card border-secondary mb-5">
+          <div class="card-footer border-secondary bg-transparent">
+            <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
           </div>
-        </div>
-      </div>
-      <div class="card border-secondary mb-5">
-        <div class="card-footer border-secondary bg-transparent">
-          <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
         </div>
       </div>
     </div>
-  </div>
   </div>
   <!-- Checkout End -->
 
