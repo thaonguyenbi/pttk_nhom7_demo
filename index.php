@@ -317,36 +317,40 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
                     $productID = $productRow['MaSP'];
                   ?>
                     <div class="col">
-                      <div class="product-item">
-                        <!-- <span class="badge bg-success position-absolute m-3">-30%</span> -->
-                        <a href="#" class="btn-wishlist"><svg width="24" height="24">
-                            <use xlink:href="#heart"></use>
-                          </svg></a>
-                        <!-- product img -->
-                        <figure>
-                          <a href="index.php" title="Product Title">
-                            <img src="images/thumb-product.png" class="tab-image">
-                          </a>
-                        </figure>
-                        <!-- product name -->
-                        <h3><?= $productRow['TenSanPham'] ?></h3>
-                        <!-- <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span> -->
-                        <!-- price -->
-                        <span class="price"><?= number_format($productRow['DonGia'], 0, ',', '.') ?>đ</span>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <form action="cart.php" method="post">
+                      <form action="cart.php" method="post">
+                        <div class="product-item">
+                          <!-- <span class="badge bg-success position-absolute m-3">-30%</span> -->
+                          <a href="#" class="btn-wishlist"><svg width="24" height="24">
+                              <use xlink:href="#heart"></use>
+                            </svg></a>
+                          <!-- product img -->
+                          <figure>
+                            <a href="index.php" title="Product Title">
+                              <img src="images/thumb-product.png" class="tab-image">
+                            </a>
+                          </figure>
+                          <!-- product name -->
+                          <h3><?= $productRow['TenSanPham'] ?></h3>
+                          <!-- <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span> -->
+                          <!-- price -->
+                          <span class="price"><?= number_format($productRow['DonGia'], 0, ',', '.') ?>đ</span>
+                          <div class="d-flex align-items-center justify-content-between">
+
                             <button type="submit" name="addtocartbtn" value="1" class="btn-cart">
                               <svg width="24" height="24">
                                 <use xlink:href="#cart"></use>
                               </svg>
                             </button>
+                            <input type="hidden" name="masp" value="<?= $productRow['MaSP'] ?>">
                             <input type="hidden" name="tensp" value="<?= $productRow['TenSanPham'] ?>">
                             <input type="hidden" name="dongia" value="<?= $productRow['DonGia'] ?>">
                             <input type="hidden" name="soluong" value="1">
-                          </form>
 
+
+                          </div>
                         </div>
-                      </div>
+                      </form>
+
                     </div>
                   <?php } ?>
                 </div>

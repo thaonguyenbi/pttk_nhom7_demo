@@ -1,6 +1,86 @@
 <?php
 include 'database/conn.php';
+$tongTien = 0;
 
+// Thêm sản phẩm vào giỏ hàng
+if (isset($_POST['addtocartbtn'])) {
+  // Lấy thông tin sản phẩm từ form
+  $MaSP = $_POST['masp'];
+  $soluong = $_POST['soluong'];
+
+  // Lấy thông tin sản phẩm từ bảng sanpham
+  $productQuery = "SELECT * FROM sanpham WHERE MaSP = '$MaSP'";
+  $productResult = mysqli_query($conn, $productQuery);
+  $product = mysqli_fetch_assoc($productResult);
+
+  $dongia = $product['DonGia']; // Đơn giá
+  $tensp = $product['TenSanPham']; //Tên sản phẩm
+
+  // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+  $checkQuery = "SELECT * FROM chitietgiohang WHERE MaSP = '$MaSP'";
+  $checkResult = mysqli_query($conn, $checkQuery);
+
+  if (mysqli_num_rows($checkResult) > 0) {
+    // Nếu sản phẩm đã có trong giỏ hàng, cập nhật số lượng
+    $row = mysqli_fetch_assoc($checkResult);
+    $newQuantity = $row['SoLuong'] + $soluong; // Tăng số lượng
+
+    // Cập nhật sản phẩm trong giỏ hàng
+    $updateQuery = "UPDATE chitietgiohang SET SoLuong = '$newQuantity' WHERE MaSP = '{$row['MaSP']}'";
+    mysqli_query($conn, $updateQuery);
+  } else {
+    // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới sản phẩm
+    $insertQuery = "INSERT INTO chitietgiohang (MaSP, SoLuong) VALUES ('$MaSP', '$soluong')";
+    mysqli_query($conn, $insertQuery); // Thực hiện thêm sản phẩm vào giỏ hàng
+  }
+}
+
+// Cập nhật số lượng sản phẩm trong giỏ hàng
+if (isset($_POST['updateQuantity'])) {
+  $MaSP = $_POST['masp']; // Lấy mã sản phẩm
+  $action = $_POST['updateQuantity']; // Nhận hành động: "plus" hoặc "minus"
+
+  // Lấy số lượng hiện tại từ bảng giỏ hàng
+  $query = "SELECT SoLuong FROM chitietgiohang WHERE MaSP = '$MaSP'";
+  $result = mysqli_query($conn, $query);
+  $row = mysqli_fetch_assoc($result);
+  $currentQuantity = $row['SoLuong'];
+
+  // Xử lý tăng hoặc giảm số lượng
+  if ($action === 'plus') {
+    $newQuantity = $currentQuantity + 1; // Tăng số lượng
+  } elseif ($action === 'minus' && $currentQuantity > 1) {
+    $newQuantity = $currentQuantity - 1; // Giảm số lượng (không dưới 1)
+  } else {
+    $newQuantity = $currentQuantity; // Không thay đổi nếu số lượng = 1 và nhấn giảm
+  }
+
+  // Cập nhật số lượng trong bảng giỏ hàng
+  $updateQuery = "UPDATE chitietgiohang SET SoLuong = '$newQuantity' WHERE MaSP = '$MaSP'";
+  mysqli_query($conn, $updateQuery);
+}
+
+
+// Xóa sản phẩm khỏi giỏ hàng
+if (isset($_POST['remove']) && isset($_POST['MaSP'])) {
+  // Lấy mã sản phẩm cần xóa
+  $MaSPToRemove = $_POST['MaSP'];
+
+  // Xóa sản phẩm khỏi bảng chitietgiohang
+  $deleteQuery = "DELETE FROM chitietgiohang WHERE MaSP = '$MaSPToRemove'";
+  mysqli_query($conn, $deleteQuery); // Thực hiện xóa sản phẩm
+}
+
+// Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+$cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
+FROM chitietgiohang
+JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+ORDER BY chitietgiohang.MaCTGH ASC");
+
+while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
+  $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong']; // Tính thành tiền
+  $tongTien += $thanhTien; // Cộng thành tiền vào tổng tiền
+}
 
 ?>
 
@@ -19,31 +99,31 @@ include 'database/conn.php';
   <meta name="keywords" content="">
   <meta name="description" content="">
 
-    <!-- Google Web Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+  <!-- Google Web Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  <!-- Libraries Stylesheet -->
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/cart.css" rel="stylesheet">
-    
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="css/cart.css" rel="stylesheet">
+
 </head>
 
 <body>
 
 
-    <!-- Navbar Start -->
-    
+  <!-- Navbar Start -->
+
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <defs>
       <symbol xmlns="http://www.w3.org/2000/svg" id="link" viewBox="0 0 24 24">
@@ -205,32 +285,7 @@ include 'database/conn.php';
                   <li class="nav-item">
                     <a href="#dangnhap" class="nav-link text-light">Đăng nhập</a>
                   </li>
-                  <!-- <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-                      <ul class="dropdown-menu" aria-labelledby="pages">
-                        <li><a href="index.html" class="dropdown-item">About Us </a></li>
-                        <li><a href="index.html" class="dropdown-item">Shop </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Product </a></li>
-                        <li><a href="index.html" class="dropdown-item">Cart </a></li>
-                        <li><a href="index.html" class="dropdown-item">Checkout </a></li>
-                        <li><a href="index.html" class="dropdown-item">Blog </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Post </a></li>
-                        <li><a href="index.html" class="dropdown-item">Styles </a></li>
-                        <li><a href="index.html" class="dropdown-item">Contact </a></li>
-                        <li><a href="index.html" class="dropdown-item">Thank You </a></li>
-                        <li><a href="index.html" class="dropdown-item">My Account </a></li>
-                        <li><a href="index.html" class="dropdown-item">404 Error </a></li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#brand" class="nav-link">Brand</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#sale" class="nav-link">Sale</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#blog" class="nav-link">Blog</a>
-                    </li> -->
+
                 </ul>
 
               </div>
@@ -240,191 +295,204 @@ include 'database/conn.php';
       </div>
     </div>
   </header>
-    <!-- Navbar End -->
+  <!-- Navbar End -->
 
 
-    <!-- Page Header Start -->
-    <div class="container-fluid mb-5" style=" background-color: rgba(177, 31, 78, 0.1)">
-        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-            <h1 class="font-weight-semi-bold text-uppercase mb-3">GIỎ HÀNG</h1>
-            <div class="d-inline-flex">
-                <p class="m-0"><a href=""><i class="fa fa-home"></i></a></p>
-                <p class="m-0 px-2">></p>
-                <p class="m-0">Giỏ hàng</p>
-            </div>
-        </div>
+  <!-- Page Header Start -->
+  <div class="container-fluid mb-5" style=" background-color: rgba(177, 31, 78, 0.1)">
+    <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+      <h1 class="font-weight-semi-bold text-uppercase mb-3">GIỎ HÀNG</h1>
+      <div class="d-inline-flex">
+        <p class="m-0"><a href="index.php"><i class="fa fa-home"></i></a></p>
+        <p class="m-0 px-2">></p>
+        <p class="m-0">Giỏ hàng</p>
+      </div>
     </div>
-    <!-- Page Header End -->
+  </div>
+  <!-- Page Header End -->
 
 
-    <!-- Cart Start -->
-    <?php
-    // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
-    $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
-                                                FROM chitietgiohang
-                                                JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
-                                               
-                                                ORDER BY chitietgiohang.MaCTGH ASC");
-    ?>
-    <div class="container-fluid pt-5">
-        <div class="row px-xl-5">
-            <div class="col-lg-12 table-responsive mb-5">
-                <table class="table table-bordered text-center mb-0">
-                    <thead class="text-dark">
-                        <tr>
-                            <th>SẢN PHẨM</th>
-                            <th>GIÁ</th>
-                            <th>SỐ LƯỢNG</th>
-                            <th>TỔNG</th>
-                            <th>XÓA</th>
-                        </tr>
-                    </thead>
-                    <tbody class="align-middle">
-                        <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
-                            <tr>
-                                <td class="align-middle">
-                                    <div style="display: flex; align-items: center;">
-                                        <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
-                                        <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?></span>
-                                    </div>
-                                </td>
-                                <td class="align-middle">
-                                    <!-- Hiển thị chỉ giá sản phẩm -->
-                                    <?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ
-                                </td>
-                                <td class="align-middle">
-                                    <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-minus">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="text" class="form-control form-control-sm bg-secondary text-center" value="<?= $cartDetailsRow['SoLuong'] ?>">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-primary btn-plus">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle">
-                                    code
-                                </td>
-                                <td class="align-middle">
-                                    <button class="btn btn-sm btn-primary">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-                  <!-- Section for Total and Button -->
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                    <!-- Left Side: "Chọn tất cả" -->
-                    <div style="font-size: 20px">
-                        <input type="checkbox" style="width: 15px; height: 15px; margin-right: 10px;">
-                        Chọn tất cả
-                    </div>
-                
-                    <!-- Right Side: "Tổng" and Button -->
+  <!-- Cart Start -->
+
+  <div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+      <div class="col-lg-12 table-responsive mb-5">
+        <table class="table table-bordered text-center mb-0">
+          <thead class="text-dark">
+            <tr>
+              <th>SẢN PHẨM</th>
+              <th>GIÁ</th>
+              <th>SỐ LƯỢNG</th>
+              <th>TỔNG</th>
+              <th>XÓA</th>
+            </tr>
+          </thead>
+          <tbody class="align-middle">
+            <?php if ($tongTien > 0) { ?> <!-- Kiểm tra xem giỏ hàng có sản phẩm không -->
+              <?php
+              // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+              $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia FROM chitietgiohang
+              JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+              ORDER BY chitietgiohang.MaCTGH ASC");
+              ?>
+              <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                <tr>
+                  <td class="align-middle">
                     <div style="display: flex; align-items: center;">
-                        <span style="font-size: 20px; font-weight: bold; margin-right: 20px;">
-                            Tổng: <span style="color: #B11F4E;">50000đ</span>
-                        </span>
-                        <button class="btn btn-xxl" style="background-color: #B11F4E; color: #FFFFFF; font-size: 20px; padding: 12px 40px; border-radius: 1px; font-weight: bold;">
-                            Mua <span>(1)</span>
-                        </button>
+                      <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
+                      <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?></span>
                     </div>
-            </div>
+                  </td>
+                  <td class="align-middle">
+                    <!-- Hiển thị chỉ giá sản phẩm -->
+                    <?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ
+                  </td>
+                  <td class="align-middle">
+                    <form method="post" action="cart.php">
+                      <div class="input-group quantity mx-auto" style="width: 100px;">
+                        <div class="input-group-btn">
+                          <button class="btn btn-sm btn-primary btn-minus" name="updateQuantity" value="minus">
+                            <i class="fa fa-minus"></i>
+                          </button>
+                        </div>
+                        <input type="hidden" name="masp" value="<?= $cartDetailsRow['MaSP'] ?>">
+                        <input type="text" name="soluong" class="form-control form-control-sm bg-secondary text-center"
+                          value="<?= $cartDetailsRow['SoLuong'] ?>" min="1" readonly />
+                        <div class="input-group-btn">
+                          <button class="btn btn-sm btn-primary btn-plus" name="updateQuantity" value="plus">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+
+                  </td>
+
+                  <td class="align-middle">
+                    <!-- Tính và hiển thị thành tiền -->
+                    <?php
+                    $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong'];
+                    echo number_format($thanhTien, 0, ',', '.') . 'đ';
+                    ?>
+                  </td>
+                  <td class="align-middle">
+                    <form method="POST" action="">
+                      <input type="hidden" name="MaSP" value="<?= htmlspecialchars($cartDetailsRow['MaSP']) ?>"> <!-- Lưu mã sản phẩm để xóa -->
+                      <button class="btn btn-sm btn-primary" type="submit" name="remove">
+                        <i class="fa fa-times"></i>
+                      </button>
+                    </form>
+
+                  </td>
+                </tr>
+              <?php } ?>
+          </tbody>
+        </table>
+        <!-- Section for Total and Button -->
+        <div style="display: flex; flex-direction: row; justify-content: flex-end; align-items: center; margin-top: 20px;">
+          <div style="display: flex; align-items: center;">
+            <span style="font-size: 20px; font-weight: bold; margin-right: 20px;">
+              Tổng: <span style="color: #B11F4E;"><?= number_format($tongTien, 0, ',', '.') ?>đ</span>
+            </span>
+            <form method="post" action="checkout.php">
+              <button name="checkout" class="btn btn-xxl"
+                style="background-color: #B11F4E; color: #FFFFFF; font-size: 20px; padding: 12px 40px; border-radius: 1px; font-weight: bold;">
+                Mua
+              </button>
+            </form>
+          </div>
         </div>
+      </div>
+    <?php } else { ?>
+      <p>Giỏ hàng của bạn trống.</p> <!-- Thông báo nếu giỏ hàng trống -->
+    <?php } ?>
     </div>
     <!-- Cart End -->
 
 
     <!-- Footer Start -->
     <footer class="py-5" style="background-color: #580323;">
-        <div class="container-fluid">
-          <div class="row">
-    
-            <div class="col-lg-3 col-md-6 col-sm-6">
-              <div class="footer-menu">
-                <img src="images/logo-footer.png" alt="logo" width="70%">
-    
-              </div>
+      <div class="container-fluid">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="footer-menu">
+              <img src="images/logo-footer.png" alt="logo" width="70%">
+
             </div>
-    
-            <div class="col-md-2 col-sm-6 text-light">
-              <div class="footer-menu ">
-                <h5 class="text-uppercase" style="color:white">Liên kết nhanh</h5>
-                <ul class="menu-list list-unstyled">
-                  <li class="menu-item">
-                    <a href="#" class="nav-link">Trang chủ</a>
-                  </li>
-                  <li class="menu-item">
-                    <a href="#" class="nav-link">Giới thiệu</a>
-                  </li>
-                  <li class="menu-item">
-                    <a href="#" class="nav-link">Sản phẩm</a>
-                  </li>
-                  <li class="menu-item">
-                    <a href="#" class="nav-link">Liên hệ</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="footer-menu">
-                <h5 class="text-uppercase" style="color:white">Thông tin liên hệ</h5>
-                <ul class="menu-list list-unstyled">
-                  <li class="menu-item">
-                    Địa chỉ: 21 Rạch Bùng Binh, Phường 10, Quận 3, TP. Hồ Chí Minh
-                  </li>
-                  <li class="menu-item">
-                    Hotline: 0878 808 808
-                  </li>
-                  <li class="menu-item">
-                    Email: maychaxinchao@maycha.com.vn
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-              <div class="footer-menu">
-                <h5 class="text-uppercase" style="color:white">Địa chỉ công ty</h5>
-                <ul class="menu-list list-unstyled">
-                  <li class="menu-item">
-                    CÔNG TY CỔ PHẦN MAYCHA
-                  </li>
-                  <li class="menu-item">
-                    38 Trịnh Đình Trọng, Phường Phú Trung, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam
-                  </li>
-                  <li class="menu-item">
-                    MST: 0317701572
-                  </li>
-                  <li class="menu-item">
-                    Hotline: 0878 808 808
-                  </li>
-                  <li class="menu-item">
-                    Email: maychaxinchao@maycha.com.vn
-                  </li>
-    
-                </ul>
-              </div>
-            </div>
-    
           </div>
+
+          <div class="col-md-2 col-sm-6 text-light">
+            <div class="footer-menu ">
+              <h5 class="text-uppercase" style="color:white">Liên kết nhanh</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item">
+                  <a href="#" class="nav-link">Trang chủ</a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="nav-link">Giới thiệu</a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="nav-link">Sản phẩm</a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="nav-link">Liên hệ</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="footer-menu">
+              <h5 class="text-uppercase" style="color:white">Thông tin liên hệ</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item">
+                  Địa chỉ: 21 Rạch Bùng Binh, Phường 10, Quận 3, TP. Hồ Chí Minh
+                </li>
+                <li class="menu-item">
+                  Hotline: 0878 808 808
+                </li>
+                <li class="menu-item">
+                  Email: maychaxinchao@maycha.com.vn
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="footer-menu">
+              <h5 class="text-uppercase" style="color:white">Địa chỉ công ty</h5>
+              <ul class="menu-list list-unstyled">
+                <li class="menu-item">
+                  CÔNG TY CỔ PHẦN MAYCHA
+                </li>
+                <li class="menu-item">
+                  38 Trịnh Đình Trọng, Phường Phú Trung, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam
+                </li>
+                <li class="menu-item">
+                  MST: 0317701572
+                </li>
+                <li class="menu-item">
+                  Hotline: 0878 808 808
+                </li>
+                <li class="menu-item">
+                  Email: maychaxinchao@maycha.com.vn
+                </li>
+
+              </ul>
+            </div>
+          </div>
+
         </div>
-      </footer>
+      </div>
+    </footer>
     <!-- Footer End -->
     <div id="footer-bottom" style="background-color: #B11F4E;">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-6 copyright">
-              <p class="text-light">MAYCHA © 2024. All rights reserved.</p>
-            </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 copyright">
+            <p class="text-light">MAYCHA © 2024. All rights reserved.</p>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
@@ -440,7 +508,6 @@ include 'database/conn.php';
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
 
-  
 </body>
 
 </html>
