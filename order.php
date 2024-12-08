@@ -1,13 +1,34 @@
 <?php
 include 'database/conn.php';
 
-
 // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
 $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
-                                            FROM chitietgiohang
-                                            JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
-                                           
-                                            ORDER BY chitietgiohang.MaCTGH ASC");
+FROM chitietgiohang
+JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+ORDER BY chitietgiohang.MaCTGH ASC");
+
+$tamTinh = 0;
+$shippingFee = 0; // Phí ship mặc định là 0
+
+// Kiểm tra xem người dùng chọn phương thức nhận hàng nào
+if (isset($_POST['delivery'])) {
+    // Nếu chọn "Giao tại nhà"
+    if ($_POST['delivery'] == 'homeDelivery') {
+        $shippingFee = 15000; // Phí ship 15.000đ
+    }
+    // Nếu chọn "Nhận tại quầy"
+    elseif ($_POST['delivery'] == 'pickup') {
+        $shippingFee = 0; // Phí ship là 0 khi nhận tại quầy
+    }
+}
+
+while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
+    $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong']; // Tính thành tiền
+    $tamTinh += $thanhTien; // Cộng thành tiền vào tạm tính
+}
+
+$tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
+
 ?>
 
 
@@ -269,146 +290,159 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
     </div>
     <!-- Page Header End -->
 
+    <form method="post" action="checkout.php">
 
-    <!-- Checkout Start -->
-    <div class="container-fluid pt-5">
-  <div class="row px-xl-5">
-    <!-- PHƯƠNG THỨC NHẬN HÀNG -->
-    <div class="col-lg-8">
-      <div class="mb-4">
-        <h4 class="font-weight-semi-bold mb-4">PHƯƠNG THỨC NHẬN HÀNG</h4>
-        <div class="row">
-          <div class="col-md-6 form-group">
-            <div>
-              <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="delivery" id="pickup" onclick="toggleBankDetails()">
-                <label class="custom-control-label" for="pickup">Nhận tại quầy</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="delivery" id="homeDelivery" onclick="toggleBankDetails()">
-                <label class="custom-control-label" for="homeDelivery">Giao tại nhà</label>
-              </div>
+        <!-- Checkout Start -->
+        <div class="container-fluid pt-5">
+            <div class="row px-xl-5">
+                <!-- PHƯƠNG THỨC NHẬN HÀNG -->
+                <div class="col-lg-8">
+                    <div class="mb-4">
+                        <h4 class="font-weight-semi-bold mb-4">PHƯƠNG THỨC NHẬN HÀNG</h4>
+                        <form method="post" action="" id="delivery-form">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" name="delivery" id="pickup"
+                                                value="pickup" onclick="toggleShipDetails(), updateShipping()" checked>
+                                            <label class="custom-control-label" for="pickup">Nhận tại quầy</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" name="delivery" id="homeDelivery"
+                                                value="homeDelivery" onclick="toggleShipDetails(), updateShipping()">
+                                            <label class="custom-control-label" for="homeDelivery">Giao tại nhà</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+                        <!-- Address Details Section (this will be shown when 'Giao tại nhà' is selected) -->
+                        <div id="bankDetails" style="display: none;">
+                            <div class="col-md-12">
+                                <h4 class="font-weight-semi-bold mb-4">ĐỊA CHỈ NHẬN HÀNG</h4>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Tỉnh / Thành phố</label>
+                                    <select class="custom-select">
+                                        <option selected>TP.HCM</option>
+                                        <option>Hà Nội</option>
+                                        <option>Hải Phòng</option>
+                                        <option>Kiên Giang</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Quận / Thành phố</label>
+                                    <select class="custom-select">
+                                        <option selected>Quận 10</option>
+                                        <option>Quận 2</option>
+                                        <option>Quận 4</option>
+                                        <option>Quận 5</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Phường / Xã</label>
+                                    <select class="custom-select">
+                                        <option selected>Phường 2</option>
+                                        <option>Phường 3</option>
+                                        <option>Phường 4</option>
+                                        <option>Phường 5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Địa chỉ nhà</label>
+                                    <input class="form-control" type="text" placeholder="Địa chỉ">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Chi Tiết Đơn Hàng -->
+                <div class="col-lg-4">
+                    <div class="card border-secondary mb-5">
+                        <div class="card-header bg-secondary border-0">
+                            <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="font-weight-medium mb-3">Sản phẩm</h5>
+                            <?php
+                            // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+                            $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia FROM chitietgiohang
+              JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+              ORDER BY chitietgiohang.MaCTGH ASC");
+                            ?>
+                            <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
+                                        <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?> x<?= $cartDetailsRow['SoLuong'] ?></span>
+                                    </div>
+                                    <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
+                                </div>
+                            <?php } ?>
+
+                            <hr class="mt-0">
+                            <div class="d-flex justify-content-between mb-3 pt-1">
+                                <h6 class="font-weight-medium">Tạm tính:</h6>
+                                <h6 class="font-weight-medium"><?= number_format($tamTinh, 0, ',', '.') ?>đ</h6>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="font-weight-medium">Phí vận chuyển</h6>
+                                <h6 class="font-weight-medium" id="shippingFee"><?= number_format($shippingFee, 0, ',', '.') ?>đ</h6>
+                            </div>
+
+                        </div>
+                        <div class="card-footer border-secondary bg-transparent">
+                            <div class="d-flex justify-content-between mt-2">
+                                <h5 class="font-weight-bold">Tổng:</h5>
+                                <h5 class="font-weight-bold" id="totalAmount"><?= number_format($tongTien, 0, ',', '.') ?>đ</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-secondary mb-5">
+                        <div class="card-footer border-secondary bg-transparent">
+                            <input type="hidden" name="shippingfee" value="<?= $shippingFee ?>">
+                            <button type="submit" name="checkout" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"
+                                style="color:white; border-radius: 40px; background-color: #B11F4E;">Thanh Toán</button>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
+    </form>
 
-        <!-- Address Details Section (this will be shown when 'Giao tại nhà' is selected) -->
-        <div id="bankDetails" style="display: none;">
-          <div class="col-md-12">
-            <h4 class="font-weight-semi-bold mb-4">ĐỊA CHỈ NHẬN HÀNG</h4>
-          </div>
+    <script>
+        function toggleShipDetails() {
+            const bankDetails = document.getElementById("bankDetails");
+            const shippingFeeElement = document.getElementById("shippingFee");
+            const isHomeDelivery = document.getElementById("homeDelivery").checked;
 
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label>Tỉnh / Thành phố</label>
-              <select class="custom-select">
-                <option selected>TP.HCM</option>
-                <option>Hà Nội</option>
-                <option>Hải Phòng</option>
-                <option>Kiên Giang</option>
-              </select>
-            </div>
-            <div class="col-md-6 form-group">
-              <label>Quận / Thành phố</label>
-              <select class="custom-select">
-                <option selected>Quận 10</option>
-                <option>Quận 2</option>
-                <option>Quận 4</option>
-                <option>Quận 5</option>
-              </select>
-            </div>
-            <div class="col-md-6 form-group">
-              <label>Phường / Xã</label>
-              <select class="custom-select">
-                <option selected>Phường 2</option>
-                <option>Phường 3</option>
-                <option>Phường 4</option>
-                <option>Phường 5</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 form-group">
-              <label>Địa chỉ nhà</label>
-              <input class="form-control" type="text" placeholder="Địa chỉ">
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Chi Tiết Đơn Hàng -->
-    <div class="col-lg-4">
-      <div class="card border-secondary mb-5">
-        <div class="card-header bg-secondary border-0">
-          <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
-        </div>
-        <div class="card-body">
-          <h5 class="font-weight-medium mb-3">Sản phẩm</h5>
-          <!-- Example products in cart -->
-          <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center">
-                <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
-                <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?></span>
-              </div>
-              <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
-            </div>
-          <?php } ?>
-
-          <hr class="mt-0">
-          <div class="d-flex justify-content-between mb-3 pt-1">
-            <h6 class="font-weight-medium">Tạm tính:</h6>
-            <h6 class="font-weight-medium">CODE</h6>
-          </div>
-          <div class="d-flex justify-content-between">
-  <h6 class="font-weight-medium">Phí vận chuyển</h6>
-  <h6 class="font-weight-medium" id="shippingFee">0đ</h6> <!-- Initial shipping fee is 0 -->
-</div>
-
-        </div>
-        <div class="card-footer border-secondary bg-transparent">
-          <div class="d-flex justify-content-between mt-2">
-            <h5 class="font-weight-bold">Tổng:</h5>
-            <h5 class="font-weight-bold" id="totalAmount">CODE</h5>
-          </div>
-        </div>
-      </div>
-      <div class="card border-secondary mb-5">
-        <div class="card-footer border-secondary bg-transparent">
-          <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  function toggleBankDetails() {
-    const bankDetails = document.getElementById("bankDetails");
-    const shippingFeeElement = document.getElementById("shippingFee");
-    const isHomeDelivery = document.getElementById("homeDelivery").checked;
-
-    if (isHomeDelivery) {
-      bankDetails.style.display = "block"; // Show address fields for home delivery
-      shippingFeeElement.textContent = "15000đ"; // Set shipping fee for home delivery
-    } else {
-      bankDetails.style.display = "none"; // Hide address fields for pickup
-      shippingFeeElement.textContent = "0đ"; // Set shipping fee for pickup
-    }
-  }
-</script>
+            if (isHomeDelivery) {
+                bankDetails.style.display = "block";
+            } else {
+                bankDetails.style.display = "none";
+            }
+        }
+    </script>
 
 
- <!-- NOTE -->
+    <!-- NOTE -->
     <div class="col-lg-12">
-  <div class="card-header  border-0">
-    <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
-    <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 150px; font-size: 18px; padding: 5px;">
-  </div>
-</div>
+        <div class="card-header  border-0">
+            <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
+            <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 150px; font-size: 18px; padding: 5px;">
+        </div>
+    </div>
     <!-- Checkout End -->
 
 
@@ -516,7 +550,37 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-    
+
+    <script>
+        function updateShipping() {
+            // Lấy giá trị của phương thức giao hàng
+            var deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
+
+            // Phí ship mặc định
+            var shippingFee = 0;
+
+            // Tạm tính, giả sử là giá trị bạn tính từ giỏ hàng
+            var tamTinh = <?php echo $tamTinh; ?>;
+
+            // Kiểm tra phương thức giao hàng và cập nhật phí ship
+            if (deliveryMethod === 'homeDelivery') {
+                shippingFee = 15000; // Phí ship 15.000đ
+            } else if (deliveryMethod === 'pickup') {
+                shippingFee = 0; // Phí ship là 0 khi nhận tại quầy
+            }
+
+            // Tính tổng tiền
+            var totalAmount = tamTinh + shippingFee;
+
+            // Cập nhật hiển thị phí ship và tổng tiền
+            document.getElementById('shippingFee').innerText = shippingFee.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('totalAmount').innerText = totalAmount.toLocaleString('vi-VN') + 'đ';
+        }
+
+        // Gọi hàm để tính toán ban đầu khi trang được load
+        window.onload = updateShipping;
+    </script>
+
 
 </body>
 

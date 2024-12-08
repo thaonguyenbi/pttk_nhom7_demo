@@ -1,13 +1,22 @@
 <?php
 include 'database/conn.php';
 
-
-// Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+/// Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
 $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
-                                            FROM chitietgiohang
-                                            JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
-                                           
-                                            ORDER BY chitietgiohang.MaCTGH ASC");
+FROM chitietgiohang
+JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+ORDER BY chitietgiohang.MaCTGH ASC");
+
+$tamTinh = 0;
+$shippingFee = 0;
+
+while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
+    $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong']; // Tính thành tiền
+    $tamTinh += $thanhTien; // Cộng thành tiền vào tạm tính
+}
+
+$tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
+
 ?>
 
 
@@ -262,7 +271,7 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
         <p class="m-0 px-2">></p>
         <p class="m-0"><a href="cart.php">Giỏ hàng</a></p>
         <p class="m-0 px-2">></p>
-        <p class="m-0"><a href="">Đặt món</a></p>
+        <p class="m-0"><a href="order.php">Đặt món</a></p>
         <p class="m-0 px-2">></p>
         <p class="m-0"><a href="checkout.php">Thanh toán</a></p>
       </div>
@@ -273,124 +282,130 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
 
   <!-- Checkout Start -->
   <div class="container-fluid pt-5">
-  <div class="row px-xl-5">
-    <!-- PHƯƠNG THỨC THANH TOÁN -->
-    <div class="col-lg-8">
-      <div class="mb-4">
-        <h4 class="font-weight-semi-bold mb-4">PHƯƠNG THỨC THANH TOÁN</h4>
-        <div class="row">
-          <div class="col-md-6 form-group">
-            <div>
-              <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="payment" id="cash" onclick="toggleBankDetails()">
-                <label class="custom-control-label" for="cash">Tiền mặt</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" class="custom-control-input" name="payment" id="banktransfer" onclick="toggleBankDetails()">
-                <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
+    <div class="row px-xl-5">
+      <!-- PHƯƠNG THỨC THANH TOÁN -->
+      <div class="col-lg-8">
+        <div class="mb-4">
+          <h4 class="font-weight-semi-bold mb-4">PHƯƠNG THỨC THANH TOÁN</h4>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" name="payment" id="cash" onclick="toggleBankDetails()" checked>
+                  <label class="custom-control-label" for="cash">Tiền mặt</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" name="payment" id="banktransfer" onclick="toggleBankDetails()">
+                  <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
+                </div>
               </div>
             </div>
+
+            <!-- Bank Details Section -->
+            <div id="bankDetails" style="display: none;">
+              <div class="col-md-12">
+                <h4 class="font-weight-semi-bold mb-4">NGÂN HÀNG LIÊN KẾT</h4>
+              </div>
+
+              <!-- Ngân Hàng and Tên Chủ Thẻ -->
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label>Ngân Hàng</label>
+                  <select class="custom-select" id="bank">
+                    <option selected>Vietcombank</option>
+                    <option>Techcombank</option>
+                    <option>Agribank</option>
+                    <option>MB Bank</option>
+                  </select>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label>Tên chủ thẻ</label>
+                  <input class="form-control" type="text" id="cardholder" placeholder="Viết hoa không dấu" style="font-style: italic;" required>
+                </div>
+              </div>
+
+              <!-- Mã Thẻ and Ngày Hết Hạn -->
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label>Mã thẻ (*)</label>
+                  <input class="form-control" type="text" id="cardnumber" placeholder="Nhập mã thẻ" style="font-style: italic;" required>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label for="exp">Ngày hết hạn</label>
+                  <input type="date" id="exp" name="exp" class="form-control" required>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Bank Details Section -->
-         <!-- Bank Details Section -->
-<div id="bankDetails" style="display: none;">
-  <div class="col-md-12">
-    <h4 class="font-weight-semi-bold mb-4">NGÂN HÀNG LIÊN KẾT</h4>
-  </div>
+          <script>
+            function toggleBankDetails() {
+              // Check the selected payment method
+              const bankDetails = document.getElementById("bankDetails");
+              const isBankTransfer = document.getElementById("banktransfer").checked;
 
-  <!-- Ngân Hàng and Tên Chủ Thẻ -->
-  <div class="row">
-    <div class="col-md-6 form-group">
-      <label>Ngân Hàng</label>
-      <select class="custom-select">
-        <option selected>Vietcombank</option>
-        <option>Techcombank</option>
-        <option>Agribank</option>
-        <option>MB Bank</option>
-      </select>
-    </div>
-    <div class="col-md-6 form-group">
-      <label>Tên chủ thẻ</label>
-      <input class="form-control" type="text" placeholder="Viết hoa không dấu" style="font-style: italic;">
-    </div>
-  </div>
-
-  <!-- Mã Thẻ and Ngày Hết Hạn -->
-  <div class="row">
-    <div class="col-md-6 form-group">
-      <label>Mã thẻ (*)</label>
-      <input class="form-control" type="text" placeholder="Nhập mã thẻ" style="font-style: italic;">
-    </div>
-    <div class="col-md-6 form-group">
-      <label for="exp">Ngày hết hạn</label>
-      <input type="date" id="exp" name="exp" class="form-control">
-    </div>
-  </div>
-</div>
-
-        </div>
-
-        <script>
-          function toggleBankDetails() {
-            // Check the selected payment method
-            const bankDetails = document.getElementById("bankDetails");
-            const isBankTransfer = document.getElementById("banktransfer").checked;
-
-            // Show or hide the bank details section
-            if (isBankTransfer) {
-              bankDetails.style.display = "block";
-            } else {
-              bankDetails.style.display = "none";
+              // Show or hide the bank details section
+              if (isBankTransfer) {
+                bankDetails.style.display = "block";
+              } else {
+                bankDetails.style.display = "none";
+              }
             }
-          }
-        </script>
-      </div>
-    </div>
-
-    <!-- Chi Tiết Đơn Hàng -->
-    <div class="col-lg-4">
-      <div class="card border-secondary mb-5">
-        <div class="card-header bg-secondary border-0">
-          <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
+          </script>
         </div>
-        <div class="card-body">
-          <h5 class="font-weight-medium mb-3">Sản phẩm</h5>
-          <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center">
-                <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
-                <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?></span>
+      </div>
+
+      <!-- Chi Tiết Đơn Hàng -->
+      <div class="col-lg-4">
+        <div class="card border-secondary mb-5">
+          <div class="card-header bg-secondary border-0">
+            <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
+          </div>
+          <div class="card-body">
+            <h5 class="font-weight-medium mb-3">Sản phẩm</h5>
+            <?php
+            // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+            $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia FROM chitietgiohang
+              JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+              ORDER BY chitietgiohang.MaCTGH ASC");
+            ?>
+            <?php while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) { ?> <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                  <img src="images/thumb-product.png" style="width: 100px; margin-right: 10px;">
+                  <span><?= htmlspecialchars($cartDetailsRow['TenSanPham']) ?> x<?= $cartDetailsRow['SoLuong'] ?></span>
+                </div>
+                <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
               </div>
-              <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
-            </div>
-          <?php } ?> <!-- Đóng vòng lặp while -->
+            <?php } ?> <!-- Đóng vòng lặp while -->
 
-          <hr class="mt-0">
-          <div class="d-flex justify-content-between mb-3 pt-1">
-            <h6 class="font-weight-medium">Tạm tính:</h6>
-            <h6 class="font-weight-medium">CODE</h6>
+            <hr class="mt-0">
+            <div class="d-flex justify-content-between mb-3 pt-1">
+              <h6 class="font-weight-medium">Tạm tính:</h6>
+              <h6 class="font-weight-medium"><?= number_format($tamTinh, 0, ',', '.') ?>đ</h6>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h6 class="font-weight-medium">Phí vận chuyển</h6>
+              <h6 class="font-weight-medium">15.000đ</h6>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <h6 class="font-weight-medium">Phí vận chuyển</h6>
-            <h6 class="font-weight-medium">15000đ</h6>
+          <div class="card-footer border-secondary bg-transparent">
+            <div class="d-flex justify-content-between mt-2">
+              <h5 class="font-weight-bold">Tổng:</h5>
+              <h5 class="font-weight-bold"><?= number_format($tongTien + 15000, 0, ',', '.') ?>đ</h5>
+            </div>
           </div>
         </div>
-        <div class="card-footer border-secondary bg-transparent">
-          <div class="d-flex justify-content-between mt-2">
-            <h5 class="font-weight-bold">Tổng:</h5>
-            <h5 class="font-weight-bold">CODE</h5>
+        <div class="card border-secondary mb-5">
+          <div class="card-footer border-secondary bg-transparent">
+            <button type="submit" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"
+              style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
           </div>
-        </div>
-      </div>
-      <div class="card border-secondary mb-5">
-        <div class="card-footer border-secondary bg-transparent">
-          <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
   <!-- Checkout End -->
 
@@ -479,9 +494,10 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
     </div>
   </div>
 
-  <!-- Back to Top -->
-  <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-  <script src="js/jquery-1.11.0.min.js"></script>
+
+  <script
+    script src="js/jquery-1.11.0.min.js">
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
   <script src="js/plugins.js"></script>
@@ -499,6 +515,7 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
 
   <!-- Template Javascript -->
   <script src="js/main.js"></script>
+
 </body>
 
 </html>

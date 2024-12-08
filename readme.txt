@@ -1,50 +1,38 @@
-It is a free HTML CSS template by https://templatesjungle.com/
-You can use this template as a starter template and start building as you require.
+# MÔN PHÂN TÍCH THIẾT KẾ HỆ THỐNG - CODE DEMO
 
-The code is consistent and can be easily maintained as we have followed a good coding standard. We want everyone to easily understand it and modify it according to their requirement. As the main goal of providing these templates is to give you something to work on before even starting.
+## Tên đề tài: PHÂN TÍCH THIẾT KẾ HỆ THỐNG QUẢN LÝ CHUỖI CỬA HÀNG TRÀ SỮA MAYCHA
 
-Preview URL: 
-https://demo.templatesjungle.com/foodmart/
+Phần code demo bao gồm các chức năng như:
+* Xem danh sách các sản phẩm (tên sản phẩm, đơn giá)
+* Quản lý giỏ hàng cá nhân (thêm, xóa, cập nhật)
+* Đặt hàng (lựa chọn phương thức vận chuyển, phương thức thanh toán)
 
-Get the Full Version here: 
-https://templatesjungle.gumroad.com/l/foodmart-bootstrap-html-template
+## TÁC GIẢ: NHÓM 7
 
+* **Nguyễn Phương Thảo** - Tác giả <https://github.com/thaonguyenbi>
+* **Nguyễn Quỳnh Anh** - Đồng tác giả  <https://github.com/Quynanhng25>
+* **Nguyễn Cao Hoài Duyên** - Đồng tác giả <https://github.com/CaoHoaiDuyen>
+* **Đinh Trương Ngọc Quỳnh Hoa** - Đồng tác giả <https://github.com/QHoa036>
+* **Trần Hoàng Nghĩa** - Đồng tác giả <https://github.com/>
 
-FREE FOR BOTH PERSONAL AND COMMERCIAL USE
+## KIẾN THỨC ÁP DỤNG
 
-This HTML Template is provided by TemplatesJungle.com and is free to use in both personal and commercial projects as long as you don't remove our credit link in the footer.
+* Sử dụng các control cơ bản và nâng cao trong Visual Studio
+* Thiết kế giao diện người dùng (UX/UI Design) trên Figma
+* SQL/MySQL để tạo và quản lý cơ sở dữ liệu
+* HTML5 để xây dựng cấu trúc nội dung
+* CSS và Bootstrap cho thiết kế bố cục và responsive
+* Responsive Web Design (thiết kế giao diện thích ứng)
+* Lập trình JavaScript và PHP cho back-end
+* Kết nối và thao tác với cơ sở dữ liệu bằng PHP
 
-However, you can remove the credit link by paying for No Attribution version of the template.
+## Lời cảm ơn
 
+Nhóm chúng em xin gửi lời cảm ơn sâu sắc đến Cô Hồ Thị Thanh Tuyến, giảng viên bộ môn Phân tích thiết kế hệ thống tại Đại học UEH,
+vì đã tận tình hướng dẫn, truyền đạt kiến thức và kinh nghiệm quý báu giúp chúng em không chỉ nắm vững lý thuyết mà còn áp dụng vào thực tế.
+Xin chân thành cảm ơn Cô vì tâm huyết và sự nhiệt tình giúp nhóm hoàn thiện đề tài tốt nhất.
 
-RIGHTS
-
-You are allowed to use it in your personal projects and commercial projects.
-
-You can modify and sell it to your clients.
-
-
-PROHIBITIONS
-
-You cannot remove the credit link which links back to templatesjungle.com.
-
-You are not permitted to resell or redistribute (paid or free) as it is. 
-
-You cannot use it to build premium templates, themes or any other goods to be sold on marketplaces.
-
-If you want to share the free resource in your blog, you must point it to original TemplatesJungle.com resource page. 
-
-You cannot host the download file in your website.
-
-
-SUPPORT
-
-You can contact us to report any bugs and errors in the template. We will try and fix them immediately although it's a free resource.
-
-Feel free to let us know about what you want to see in the future downloads. We will definitely give it a thought while creating our next freebie.
-
-
-CREDITS & REFERENCES
+## CREDITS & REFERENCES
 
 https://getbootstrap.com/
 
@@ -68,7 +56,5 @@ JQuery Plugins
 Swiper Slider - https://swiperjs.com/
 Chocolat.js – a Free Lightbox Plugin -http://chocolat.insipi.de/
 Magnific Lightbox - https://github.com/dimsemenov/Magnific-Popup
-
-Thanks for downloading from TemplatesJungle.com !
 
 
