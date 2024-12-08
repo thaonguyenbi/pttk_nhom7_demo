@@ -9655,3 +9655,7 @@ header .container-fluid {
 .cart .product-qty {
   min-width: 130px;
 }
+/* checkout */
+.custom-control {
+  padding-bottom: 10px;
+}
