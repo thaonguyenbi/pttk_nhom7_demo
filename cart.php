@@ -406,7 +406,7 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
             <span style="font-size: 20px; font-weight: bold; margin-right: 20px;">
               Tổng: <span style="color: #B11F4E;"><?= number_format($tongTien, 0, ',', '.') ?>đ</span>
             </span>
-            <form method="post" action="checkout.php">
+            <form method="post" action="order.php">
               <button name="checkout" class="btn btn-xxl"
                 style="background-color: #B11F4E; color: #FFFFFF; font-size: 20px; padding: 12px 40px; border-radius: 1px; font-weight: bold;">
                 Mua
