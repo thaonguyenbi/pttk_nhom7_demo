@@ -279,13 +279,14 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
             <div class="col-md-6 form-group">
               <div class="">
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
-                  <label class="custom-control-label" for="banktransfer">Tiền mặt</label>
+                  <input type="radio" class="custom-control-input" name="payment" id="cash">
+                  <label class="custom-control-label" for="cash">Tiền mặt</label>
                 </div>
                 <div class="custom-control custom-radio">
                   <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
                   <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
                 </div>
+
               </div>
             </div>
             <div class="col-md-6 form-group">
@@ -404,31 +405,31 @@ $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSa
                 <p class="mb-0"><?= number_format($cartDetailsRow['DonGia'], 0, ',', '.') ?>đ</p>
               </div>
             <?php } ?> <!-- Đóng vòng lặp while -->
-          
-          <hr class="mt-0">
-          <div class="d-flex justify-content-between mb-3 pt-1">
-            <h6 class="font-weight-medium">Tạm tính:</h6>
-            <h6 class="font-weight-medium">CODE</h6>
+
+            <hr class="mt-0">
+            <div class="d-flex justify-content-between mb-3 pt-1">
+              <h6 class="font-weight-medium">Tạm tính:</h6>
+              <h6 class="font-weight-medium">CODE</h6>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h6 class="font-weight-medium">Phí vận chuyển</h6>
+              <h6 class="font-weight-medium">15000đ</h6>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <h6 class="font-weight-medium">Phí vận chuyển</h6>
-            <h6 class="font-weight-medium">15000đ</h6>
+          <div class="card-footer border-secondary bg-transparent">
+            <div class="d-flex justify-content-between mt-2">
+              <h5 class="font-weight-bold">Tổng:</h5>
+              <h5 class="font-weight-bold">CODE</h5>
+            </div>
           </div>
         </div>
-        <div class="card-footer border-secondary bg-transparent">
-          <div class="d-flex justify-content-between mt-2">
-            <h5 class="font-weight-bold">Tổng:</h5>
-            <h5 class="font-weight-bold">CODE</h5>
+        <div class="card border-secondary mb-5">
+          <div class="card-footer border-secondary bg-transparent">
+            <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
           </div>
-        </div>
-      </div>
-      <div class="card border-secondary mb-5">
-        <div class="card-footer border-secondary bg-transparent">
-          <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" style="color:white; border-radius: 40px; background-color: #B11F4E;">Xác Nhận</button>
         </div>
       </div>
     </div>
-  </div>
   </div>
   <!-- Checkout End -->
 
