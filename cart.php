@@ -319,7 +319,7 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
       <div class="d-inline-flex">
         <p class="m-0"><a href="index.php"><i class="fa fa-home"></i></a></p>
         <p class="m-0 px-2">></p>
-        <p class="m-0">Giỏ hàng</p>
+        <p class="m-0"><a href="cart.php" style="color:#580323">Giỏ hàng</a></p>
       </div>
     </div>
   </div>

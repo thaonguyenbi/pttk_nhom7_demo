@@ -259,11 +259,11 @@ if (isset($_POST['checkout'])) {
       <div class="d-inline-flex">
         <p class="m-0"><a href="index.php"><i class="fa fa-home"></i></a></p>
         <p class="m-0 px-2">></p>
-        <p class="m-0"><a href="cart.php">Giỏ hàng</a></p>
+        <p class="m-0"><a href="cart.php" style="color:#580323">Giỏ hàng</a></p>
         <p class="m-0 px-2">></p>
-        <p class="m-0"><a href="order.php">Đặt món</a></p>
+        <p class="m-0" ><a href="order.php" style="color:#580323">Đặt món</a></p>
         <p class="m-0 px-2">></p>
-        <p class="m-0"><a href="checkout.php">Thanh toán</a></p>
+        <p class="m-0"><a href="checkout.php" style="color:#580323">Thanh toán</a></p>
       </div>
     </div>
   </div>
@@ -285,7 +285,7 @@ if (isset($_POST['checkout'])) {
                   <label class="custom-control-label" for="cash">Tiền mặt</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" name="payment" id="banktransfer" onclick="toggleBankDetails()">
+                  <input type="radio" class="custom-control-input" style="background-color:#580323"name="payment" id="banktransfer" onclick="toggleBankDetails()">
                   <label class="custom-control-label" for="banktransfer">Chuyển khoản</label>
                 </div>
               </div>
@@ -298,8 +298,8 @@ if (isset($_POST['checkout'])) {
               </div>
 
               <!-- Ngân Hàng and Tên Chủ Thẻ -->
-              <div class="row">
-                <div class="col-md-6 form-group">
+              <div class="row" style="color:black">
+                <div class="col-md-6 form-group" >
                   <label>Ngân Hàng</label>
                   <select class="custom-select" id="bank">
                     <option selected>Vietcombank</option>
@@ -315,7 +315,7 @@ if (isset($_POST['checkout'])) {
               </div>
 
               <!-- Mã Thẻ and Ngày Hết Hạn -->
-              <div class="row">
+              <div class="row" style="color:black">
                 <div class="col-md-6 form-group">
                   <label>Mã thẻ (*)</label>
                   <input class="form-control" type="text" id="cardnumber" placeholder="Nhập mã thẻ" style="font-style: italic;" required>
@@ -349,9 +349,10 @@ if (isset($_POST['checkout'])) {
       <!-- Chi Tiết Đơn Hàng -->
       <div class="col-lg-4">
         <div class="card border-secondary mb-5">
-          <div class="card-header bg-secondary border-0">
+          <div class="card-header border-0" style="background-color: rgba(177, 31, 78, 0.1)">
             <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
           </div>
+
           <div class="card-body">
             <h5 class="font-weight-medium mb-3">Sản phẩm</h5>
             <?php

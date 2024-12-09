@@ -257,9 +257,9 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
             <div class="d-inline-flex">
                 <p class="m-0"><a href="index.php"><i class="fa fa-home"></i></a></p>
                 <p class="m-0 px-2">></p>
-                <p class="m-0"><a href="cart.php">Giỏ hàng</a></p>
+                <p class="m-0"><a href="cart.php" style="color:#580323">Giỏ hàng</a></p>
                 <p class="m-0 px-2">></p>
-                <p class="m-0"><a href="">Đặt món</a></p>
+                <p class="m-0"><a href="order.php"style="color:#580323">Đặt món</a></p>
 
             </div>
         </div>
@@ -301,7 +301,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                                 <h4 class="font-weight-semi-bold mb-4">ĐỊA CHỈ NHẬN HÀNG</h4>
                             </div>
 
-                            <div class="row">
+                            <div class="row" style="color:black">
                                 <div class="col-md-6 form-group">
                                     <label>Tỉnh / Thành phố</label>
                                     <select class="custom-select">
@@ -331,7 +331,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" style="color:black">
                                 <div class="col-md-6 form-group">
                                     <label>Địa chỉ nhà</label>
                                     <input class="form-control" type="text" placeholder="Địa chỉ">
@@ -345,7 +345,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                 <!-- Chi Tiết Đơn Hàng -->
                 <div class="col-lg-4">
                     <div class="card border-secondary mb-5">
-                        <div class="card-header bg-secondary border-0">
+                        <div class="card-header border-0" style="background-color: rgba(177, 31, 78, 0.1);">
                             <h4 class="font-weight-semi-bold m-0">Chi Tiết Đơn Hàng</h4>
                         </div>
                         <div class="card-body">
