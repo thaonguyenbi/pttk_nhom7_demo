@@ -426,76 +426,76 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
 
     <!-- Footer Start -->
     <footer class="py-5" style="background-color: #580323;">
-      <div class="container-fluid">
-        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
 
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="footer-menu">
-              <img src="images/logo-footer.png" alt="logo" width="70%">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer-menu">
+                        <img src="images/logo-footer.png" alt="logo" width="70%">
+
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-sm-6 text-light">
+                    <div class="footer-menu ">
+                        <h5 class="text-uppercase" style="color:white">Liên kết nhanh</h5>
+                        <ul class="menu-list list-unstyled">
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Trang chủ</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Giới thiệu</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Sản phẩm</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="nav-link">Liên hệ</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-menu">
+                        <h5 class="text-uppercase" style="color:white">Thông tin liên hệ</h5>
+                        <ul class="menu-list list-unstyled">
+                            <li class="menu-item">
+                                Địa chỉ: 21 Rạch Bùng Binh, Phường 10, Quận 3, TP. Hồ Chí Minh
+                            </li>
+                            <li class="menu-item">
+                                Hotline: 0878 808 808
+                            </li>
+                            <li class="menu-item">
+                                Email: maychaxinchao@maycha.com.vn
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-menu">
+                        <h5 class="text-uppercase" style="color:white">Địa chỉ công ty</h5>
+                        <ul class="menu-list list-unstyled">
+                            <li class="menu-item">
+                                CÔNG TY CỔ PHẦN MAYCHA
+                            </li>
+                            <li class="menu-item">
+                                38 Trịnh Đình Trọng, Phường Phú Trung, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam
+                            </li>
+                            <li class="menu-item">
+                                MST: 0317701572
+                            </li>
+                            <li class="menu-item">
+                                Hotline: 0878 808 808
+                            </li>
+                            <li class="menu-item">
+                                Email: maychaxinchao@maycha.com.vn
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
 
             </div>
-          </div>
-
-          <div class="col-md-2 col-sm-6 text-light">
-            <div class="footer-menu ">
-              <h5 class="text-uppercase" style="color:white">Liên kết nhanh</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item">
-                  <a href="#" class="nav-link">Trang chủ</a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="nav-link">Giới thiệu</a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="nav-link">Sản phẩm</a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="nav-link">Liên hệ</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <div class="footer-menu">
-              <h5 class="text-uppercase" style="color:white">Thông tin liên hệ</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item">
-                  Địa chỉ: 21 Rạch Bùng Binh, Phường 10, Quận 3, TP. Hồ Chí Minh
-                </li>
-                <li class="menu-item">
-                  Hotline: 0878 808 808
-                </li>
-                <li class="menu-item">
-                  Email: maychaxinchao@maycha.com.vn
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <div class="footer-menu">
-              <h5 class="text-uppercase" style="color:white">Địa chỉ công ty</h5>
-              <ul class="menu-list list-unstyled">
-                <li class="menu-item">
-                  CÔNG TY CỔ PHẦN MAYCHA
-                </li>
-                <li class="menu-item">
-                  38 Trịnh Đình Trọng, Phường Phú Trung, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam
-                </li>
-                <li class="menu-item">
-                  MST: 0317701572
-                </li>
-                <li class="menu-item">
-                  Hotline: 0878 808 808
-                </li>
-                <li class="menu-item">
-                  Email: maychaxinchao@maycha.com.vn
-                </li>
-
-              </ul>
-            </div>
-          </div>
-
         </div>
-      </div>
     </footer>
     <!-- Footer End -->
     <div id="footer-bottom" style="background-color: #B11F4E;">
