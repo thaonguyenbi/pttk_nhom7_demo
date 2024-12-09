@@ -295,7 +295,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                         </form>
 
 
-                        <!-- Address Details Section (this will be shown when 'Giao tại nhà' is selected) -->
+                        <!-- Address Details Section -->
                         <div id="bankDetails" style="display: none;">
                             <div class="col-md-12">
                                 <h4 class="font-weight-semi-bold mb-4">ĐỊA CHỈ NHẬN HÀNG</h4>
@@ -337,6 +337,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                                     <input class="form-control" type="text" placeholder="Địa chỉ">
                                 </div>
                             </div>
+                            
                         </div>
 
                     </div>
@@ -412,7 +413,13 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
     </script>
 
 
-   
+   <!-- NOTE -->
+ <div class="col-lg-8">
+        <div class="card-header  border-0" style="background-color: white;">
+            <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
+            <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 100px; font-size: 12px; padding: 5px;">
+        </div>
+    </div>
     <!-- Checkout End -->
 
 
