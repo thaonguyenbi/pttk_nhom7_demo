@@ -138,7 +138,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
 
                 <div class="col-sm-4 col-lg-3 text-center text-sm-start">
                     <div class="main-logo">
-                        <a href="index.html">
+                        <a href="index.php">
                             <img src="images/logo.png" alt="logo" class="img-fluid" width="20%">
                         </a>
                     </div>
@@ -414,9 +414,9 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
 
     <!-- NOTE -->
     <div class="col-lg-12">
-        <div class="card-header  border-0">
+        <div class="card-header  border-0" style="background-color: white;">
             <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
-            <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 150px; font-size: 18px; padding: 5px;">
+            <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 100px; font-size: 12px; padding: 5px;">
         </div>
     </div>
     <!-- Checkout End -->
