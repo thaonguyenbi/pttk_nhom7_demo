@@ -274,7 +274,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                 <!-- PHƯƠNG THỨC NHẬN HÀNG -->
                 <div class="col-lg-8">
                     <div class="mb-4">
-                        <h4 class="font-weight-semi-bold mb-4">&nbsp &nbsp&nbsp     PHƯƠNG THỨC NHẬN HÀNG</h4>
+                        <h4 class="font-weight-semi-bold mb-4">PHƯƠNG THỨC NHẬN HÀNG</h4>
                         <form method="post" action="" id="delivery-form">
                             <div class="row">
                                 <div class="col-md-6 form-group">
@@ -297,9 +297,8 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
 
                         <!-- Address Details Section -->
                         <div id="bankDetails" style="display: none;">
-                            <div class="col-md-12">
-                                <h4 class="font-weight-semi-bold mb-4">&nbsp&nbsp&nbspĐỊA CHỈ NHẬN HÀNG</h4>
-                            </div>
+
+                            <h4 class="font-weight-semi-bold mb-4">ĐỊA CHỈ NHẬN HÀNG</h4>
 
                             <div class="row" style="color:black">
                                 <div class="col-md-6 form-group">
@@ -335,12 +334,12 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                                 </div>
                             </div>
 
-                           
+
 
                         </div>
                         <!-- NOTE -->
-                        <div class="col-lg-8">
-                            <div class="card-header  border-0" style="background-color: white;">
+                        <div>
+                            <div class="border-0">
                                 <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
                                 <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 100px; font-size: 12px; padding: 5px;">
                             </div>
