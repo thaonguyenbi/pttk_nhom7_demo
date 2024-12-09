@@ -200,7 +200,7 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
 
         <div class="col-sm-4 col-lg-3 text-center text-sm-start">
           <div class="main-logo">
-            <a href="index.html">
+            <a href="index.php">
               <img src="images/logo.png" alt="logo" class="img-fluid" width="20%">
             </a>
           </div>
