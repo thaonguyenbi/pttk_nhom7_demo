@@ -1,5 +1,7 @@
 <?php
 include 'database/conn.php';
+session_start();
+
 $tongTien = 0;
 
 // Thêm sản phẩm vào giỏ hàng

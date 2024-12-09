@@ -1,5 +1,6 @@
 <?php
 include 'database/conn.php';
+session_start();
 
 $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC LIMIT 10");
 $tongTien = 0;
@@ -12,6 +13,12 @@ ORDER BY chitietgiohang.MaCTGH ASC");
 while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
   $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong']; // Tính thành tiền
   $tongTien += $thanhTien; // Cộng thành tiền vào tổng tiền
+}
+
+//Thông báo đặt hàng thành công
+if (isset($_SESSION['success_message'])) {
+  echo "<div class='alert alert-success'>" . $_SESSION['success_message'] . "</div>";
+  unset($_SESSION['success_message']); // Xóa thông báo sau khi hiển thị
 }
 ?>
 
@@ -108,7 +115,7 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
       <div class="offcanvas-body">
         <div class="order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your cart</span>
+            <span class="text-primary">Giỏ hàng</span>
             <span class="badge bg-primary rounded-pill">3</span>
           </h4>
           <ul class="list-group mb-3">
@@ -119,47 +126,18 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
               </div>
               <span class="text-body-secondary">$12</span>
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Fresh grapes</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$8</span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Heinz tomato ketchup</h6>
-                <small class="text-body-secondary">Brief description</small>
-              </div>
-              <span class="text-body-secondary">$5</span>
-            </li>
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (USD)</span>
               <strong>$20</strong>
             </li>
           </ul>
   
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </div>
-      </div>
-    </div>
-    
-    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch" aria-labelledby="Search">
-      <div class="offcanvas-header justify-content-center">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Search</span>
-          </h4>
-          <form role="search" action="index.html" method="get" class="d-flex mt-3 gap-0">
-            <input class="form-control rounded-start rounded-0 bg-light" type="email" placeholder="What are you looking for?" aria-label="What are you looking for?">
-            <button class="btn btn-dark rounded-end rounded-0" type="submit">Search</button>
-          </form>
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Đặt hàng</button>
         </div>
       </div>
     </div> -->
+
+
 
   <header>
     <div class="container-fluid">
@@ -465,6 +443,20 @@ while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
+
+  <script>
+    setTimeout(function() {
+      // Thêm class 'hidden' vào alert để tạo hiệu ứng mờ dần
+      document.querySelector('.alert').classList.add('hidden');
+
+
+      // Sau khi hiệu ứng hoàn tất (1 giây), xóa alert khỏi DOM
+      setTimeout(function() {
+        document.querySelector('.alert').remove();
+      }, 3000); // Đợi 1 giây để hiệu ứng hoàn tất
+    }, 3000); // 3 giây
+  </script>
+
 </body>
 
 </html>

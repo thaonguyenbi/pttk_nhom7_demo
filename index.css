@@ -1,20 +1,3 @@
-/*
-Theme Name: FoodMart
-Theme URI: https://templatesjungle.com/
-Author: TemplatesJungle
-Author URI: https://templatesjungle.com/
-Description: FoodMart is specially designed product packaged for eCommerce store websites.
-Version: 1.1
-*/
-
-/*--------------------------------------------------------------
-This is main CSS file that contains custom style rules used in this template
---------------------------------------------------------------*/
-
-/*------------------------------------*\
-    Table of contents
-\*------------------------------------*/
-
 /*------------------------------------------------
 
 CSS STRUCTURE:
@@ -591,7 +574,7 @@ h5 {
   font-size: 18px;
   line-height: 25px;
   text-transform: capitalize;
-  color: #B11F4E;
+  color: #b11f4e;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -769,4 +752,25 @@ h5 {
   .product-thumbnail-slider {
     height: 740px;
   }
+}
+
+.alert {
+  padding: 15px;
+  background-color: #580323;
+  color: white;
+  margin-bottom: 20px;
+
+  /* Đặt phần tử ở vị trí cố định, giữa màn hình */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Đảm bảo alert ở trên các phần tử khác */
+  width: auto; /* Điều chỉnh chiều rộng của alert */
+  max-width: 80%; /* Giới hạn chiều rộng của alert */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ để nổi bật */
+}
+
+.hidden {
+  opacity: 0; /* Giảm độ mờ để ẩn thông báo */
 }

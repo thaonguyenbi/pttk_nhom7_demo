@@ -1,5 +1,6 @@
 <?php
 include 'database/conn.php';
+session_start();
 
 // Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
 $cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
@@ -236,32 +237,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                                     <li class="nav-item">
                                         <a href="#dangnhap" class="nav-link text-light">Đăng nhập</a>
                                     </li>
-                                    <!-- <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-                      <ul class="dropdown-menu" aria-labelledby="pages">
-                        <li><a href="index.html" class="dropdown-item">About Us </a></li>
-                        <li><a href="index.html" class="dropdown-item">Shop </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Product </a></li>
-                        <li><a href="index.html" class="dropdown-item">Cart </a></li>
-                        <li><a href="index.html" class="dropdown-item">Checkout </a></li>
-                        <li><a href="index.html" class="dropdown-item">Blog </a></li>
-                        <li><a href="index.html" class="dropdown-item">Single Post </a></li>
-                        <li><a href="index.html" class="dropdown-item">Styles </a></li>
-                        <li><a href="index.html" class="dropdown-item">Contact </a></li>
-                        <li><a href="index.html" class="dropdown-item">Thank You </a></li>
-                        <li><a href="index.html" class="dropdown-item">My Account </a></li>
-                        <li><a href="index.html" class="dropdown-item">404 Error </a></li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#brand" class="nav-link">Brand</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#sale" class="nav-link">Sale</a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="#blog" class="nav-link">Blog</a>
-                    </li> -->
+                                    
                                 </ul>
 
                             </div>
@@ -411,7 +387,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
                     <div class="card border-secondary mb-5">
                         <div class="card-footer border-secondary bg-transparent">
                             <input type="hidden" name="shippingfee" value="<?= $shippingFee ?>">
-                            <button type="submit" name="checkout" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"
+                            <button type="submit" name="order" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"
                                 style="color:white; border-radius: 40px; background-color: #B11F4E;">Thanh Toán</button>
 
                         </div>
