@@ -13,18 +13,7 @@ Phần code demo bao gồm các chức năng như:
 * **Nguyễn Quỳnh Anh** - Đồng tác giả  <https://github.com/Quynanhng25>
 * **Nguyễn Cao Hoài Duyên** - Đồng tác giả <https://github.com/CaoHoaiDuyen>
 * **Đinh Trương Ngọc Quỳnh Hoa** - Đồng tác giả <https://github.com/QHoa036>
-* **Trần Hoàng Nghĩa** - Đồng tác giả <https://github.com/>
-
-## KIẾN THỨC ÁP DỤNG
-
-* Sử dụng các control cơ bản và nâng cao trong Visual Studio
-* Thiết kế giao diện người dùng (UX/UI Design) trên Figma
-* SQL/MySQL để tạo và quản lý cơ sở dữ liệu
-* HTML5 để xây dựng cấu trúc nội dung
-* CSS và Bootstrap cho thiết kế bố cục và responsive
-* Responsive Web Design (thiết kế giao diện thích ứng)
-* Lập trình JavaScript và PHP cho back-end
-* Kết nối và thao tác với cơ sở dữ liệu bằng PHP
+* **Trần Hoàng Nghĩa** - Đồng tác giả <https://github.com/Blink713>
 
 ## Lời cảm ơn
 

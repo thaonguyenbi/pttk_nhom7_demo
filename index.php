@@ -2,7 +2,17 @@
 include 'database/conn.php';
 
 $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC LIMIT 10");
+$tongTien = 0;
+// Lấy chi tiết giỏ hàng để hiển thị các sản phẩm
+$cartDetailsResult = mysqli_query($conn, "SELECT chitietgiohang.*, sanpham.TenSanPham, sanpham.DonGia
+FROM chitietgiohang
+JOIN sanpham ON chitietgiohang.MaSP = sanpham.MaSP
+ORDER BY chitietgiohang.MaCTGH ASC");
 
+while ($cartDetailsRow = mysqli_fetch_assoc($cartDetailsResult)) {
+  $thanhTien = $cartDetailsRow['DonGia'] * $cartDetailsRow['SoLuong']; // Tính thành tiền
+  $tongTien += $thanhTien; // Cộng thành tiền vào tổng tiền
+}
 ?>
 
 <!DOCTYPE html>
@@ -210,7 +220,7 @@ $productsResult = mysqli_query($conn, "SELECT * FROM SanPham ORDER BY MaSP ASC L
           <div class="cart text-end d-none d-lg-block dropdown">
             <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
               <span class="fs-6 text-muted dropdown-toggle">Giỏ hàng</span>
-              <span class="cart-total fs-5 fw-bold">57.000đ</span>
+              <span class="cart-total fs-5 fw-bold"><?= number_format($tongTien, 0, ',', '.') ?>đ</span>
             </button>
           </div>
         </div>
