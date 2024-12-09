@@ -267,7 +267,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
     <!-- Page Header End -->
 
     <form method="post" action="checkout.php">
-
+ 
         <!-- Checkout Start -->
         <div class="container-fluid pt-5">
             <div class="row px-xl-5">
@@ -412,13 +412,7 @@ $tongTien = $tamTinh + $shippingFee; // Cộng thành tiền vào tạm tính
     </script>
 
 
-    <!-- NOTE -->
-    <div class="col-lg-12">
-        <div class="card-header  border-0" style="background-color: white;">
-            <h4 class="font-weight-semi-bold m-0">GHI CHÚ</h4>
-            <input class="form-control" type="text" placeholder="Ghi chú đơn hàng " style="height: 100px; font-size: 12px; padding: 5px;">
-        </div>
-    </div>
+   
     <!-- Checkout End -->
 
 
